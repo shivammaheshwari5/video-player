@@ -14,7 +14,7 @@ export interface Videos {
 
 export async function GET(req: NextRequest, res: NextResponse) {
     try {
-        const existingData: Videos[] = JSON.parse(fs.readFileSync('data/data.json', 'utf-8'));
+        const existingData: Videos[] = JSON.parse(fs.readFileSync('public/data.json', 'utf-8'));
         existingData.sort((a, b) => a.order - b.order);
         return NextResponse.json(existingData);
     } catch (error) {
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 export async function PUT(req: NextRequest, res: NextResponse) {
     try {
         const newData: Videos[] = await req.json();
-        let existingData: Videos[] = JSON.parse(fs.readFileSync('data/data.json', 'utf-8'));
+        let existingData: Videos[] = JSON.parse(fs.readFileSync('public/data.json', 'utf-8'));
 
         for (let val of newData) {
             const index = existingData.findIndex(item => item.id === val.id);
@@ -36,7 +36,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
             existingData[index] = { ...existingData[index], ...val };
         }
 
-        fs.writeFileSync('data/data.json', JSON.stringify(existingData, null, 2));
+        fs.writeFileSync('public/data.json', JSON.stringify(existingData, null, 2));
         return NextResponse.json({ data: existingData, message: 'Video data updated successfully' });
     } catch (error) {
         console.error('Error saving video data:', error);
